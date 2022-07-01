@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import axios from "axios";
-import { onMounted } from 'vue';
+import { onMounted, ref } from "vue";
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
-defineProps<{
-  msg: string
-}>()
+const msg = ref<string | null>("Hello");
 
 const callAPI = async () => {
-  const data = await axios({
-    method: 'get',
-    url: 'http://127.0.0.1:3000',
-    responseType: 'json',
+  console.log(apiBaseUrl);
+  const result = await axios({
+    method: "get",
+    url: apiBaseUrl,
+    responseType: "json",
   });
-  console.log(data);
+  console.log(result);
+  msg.value = result?.data?.value;
 };
-
 
 onMounted(() => {
   callAPI();
@@ -23,12 +23,7 @@ onMounted(() => {
 
 <template>
   <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a target="_blank" href="https://vitejs.dev/">Vite</a> +
-      <a target="_blank" href="https://vuejs.org/">Vue 3</a>. What's next?
-    </h3>
+    <h1 class="green">{{ msg }} {{ apiBaseUrl }}</h1>
   </div>
 </template>
 
